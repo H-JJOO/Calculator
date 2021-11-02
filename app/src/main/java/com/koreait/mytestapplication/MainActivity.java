@@ -4,111 +4,113 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private TextView tvDisplay;
+    private EditText etVal1;
+    private EditText etVal2;
+    private EditText etResult;
+
+    private String operator = "";
+
+
     @Override
+    //딱 한번 호출
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        tvDisplay = findViewById(R.id.tvDisplay);
+        etVal1 = findViewById(R.id.etVal1);
+        etVal2 = findViewById(R.id.etVal2);
+        etResult = findViewById(R.id.etResult);
+
+    }
+    // Clear 버튼 이벤트
+    public void clkClear(View v) {
+        operator = "";
+        tvDisplay.setText("");
+        etVal1.getText().clear();
+        etVal2.getText().clear();
+        etResult.getText().clear();
+    }
+
+    // 숫자 버튼 이벤트
+    public void clkNumber(View v) {
+        TextView tv = (TextView)v;
+        String num = tv.getText().toString();
+        addTvDisplay(num);
+
+        switch (operator) {
+            case "":
+//                String oldVal = etVal1.getText().toString();
+//                etVal1.setText(oldVal + num);
+                etVal1.append(num);
+                break;
+            default:
+                String oldVal2 = etVal2.getText().toString();
+                etVal2.setText(oldVal2 + num);
+                break;
+        }
+
+    }
+
+    // 사칙연산 버튼 이벤트
+    public void clkOperator(View v) {
+        TextView tv = (TextView)v;
+        String oper = tv.getText().toString();//누른버튼의 문자열 주소값
+        operator = oper;
+
+        addTvDisplay(oper);
+    }
+
+    // equal 버튼 이벤트
+    public void clkEqual (View v) {
+        addTvDisplay("=");
+        String strVal1 = etVal1.getText().toString();
+        String strVal2 = etVal2.getText().toString();
+        //정수형으로 바꿔주기, 나누기는 더블형으로...
+        int intVal1 = Integer.parseInt(strVal1);
+        int intVal2 = Integer.parseInt(strVal2);
+
+        if ("/".equals(operator)) {
+            float result = (float)intVal1 / intVal2;
+            String strResult = String.valueOf(result);
+            addTvDisplay(strResult);
+            etResult.setText(strResult);
+            return;
+        }
+        String strResult = "";
+
+
+        switch (operator) {
+            case "+":
+                strResult = String.valueOf(intVal1 + intVal2);
+                break;
+            case "-":
+                strResult = String.valueOf(intVal1 - intVal2);
+                break;
+            case "/":
+                strResult = String.valueOf((float) intVal1 / intVal2);
+                break;
+            case "*":
+                strResult = String.valueOf(intVal1 * intVal2);
+                break;
+        }
+
+        addTvDisplay(strResult);
+        etResult.setText(strResult);
+
 
 
     }
 
-    public void clkBtn(View v) {
-        EditText editText = (EditText) findViewById(R.id.et);
-        String str = editText.getText().toString();
-
-        switch (v.getId()) {
-            case R.id.btn_0:
-                str += "0";
-                editText.setText(str);
-                break;
-
-            case R.id.btn_1:
-                str += "1";
-                editText.setText(str);
-                break;
-
-            case R.id.btn_2:
-                str += "2";
-                editText.setText(str);
-                break;
-
-            case R.id.btn_3:
-                str += "3";
-                editText.setText(str);
-                break;
-
-            case R.id.btn_4:
-                str += "4";
-                editText.setText(str);
-                break;
-
-            case R.id.btn_5:
-                str += "5";
-                editText.setText(str);
-                break;
-
-            case R.id.btn_6:
-                str += "6";
-                editText.setText(str);
-                break;
-
-            case R.id.btn_7:
-                str += "7";
-                editText.setText(str);
-                break;
-
-            case R.id.btn_8:
-                str += "8";
-                editText.setText(str);
-                break;
-
-            case R.id.btn_9:
-                str += "9";
-                editText.setText(str);
-                break;
-
-            case R.id.btn_cancel:
-                str += "AC";
-                editText.setText(str);
-                break;
-
-            case R.id.btn_percent:
-                str += "%";
-                editText.setText(str);
-                break;
-
-            case R.id.btn_divide:
-                str += "/";
-                editText.setText(str);
-                break;
-
-            case R.id.btn_multiply:
-                str += "X";
-                editText.setText(str);
-                break;
-
-            case R.id.btn_subtract:
-                str += "1";
-                editText.setText(str);
-                break;
-
-            case R.id.btn_add:
-                str += "1";
-                editText.setText(str);
-                break;
-
-            case R.id.btn_equal:
-                str += "=";
-                editText.setText(str);
-                break;
-        }
-
+    private void addTvDisplay(String val) {
+//        String oldVal = tvDisplay.getText().toString();
+//        tvDisplay.setText(oldVal + val);
+        tvDisplay.append(val);
     }
 
 }
